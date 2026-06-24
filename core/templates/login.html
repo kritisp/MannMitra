@@ -181,10 +181,11 @@
         });
 
         if (error) {
+          console.error("Supabase login error:", error);
           if (error.message === "Invalid login credentials") {
-            alert("No user found with this email. Please register first.");
+            alert("Invalid login credentials. Please check your email/password or register first.");
           } else {
-            alert("Error: " + error.message);
+            alert("Error: " + (error.message || JSON.stringify(error) || "Unknown login error"));
           }
         } else if (data.session) {
           // --- SUCCESS ---
