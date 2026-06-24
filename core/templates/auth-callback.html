@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Redirecting...</title>
+    <script src="{% url 'config_js' %}"></script>
+    <script type="module">
+      import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+      const supabaseUrl = window.MANN_MITRA_CONFIG.SUPABASE_URL;
+      const supabaseKey = window.MANN_MITRA_CONFIG.SUPABASE_KEY;
+      const supabase = createClient(supabaseUrl, supabaseKey);
+
+      async function handleRedirect() {
+        // Get current session
+        const {
+          data: { session },
+          error,
+        } = await supabase.auth.getSession();
+
+        if (error) {
+          console.error("Session error:", error);
+          window.location.href = "{% url 'login' %}";
+          return;
+        }
+
+        if (session) {
+          console.log("✅ Logged in as:", session.user.email);
+          window.location.href = "{% url 'stu_dashboard' %}";
+        } else {
+          console.log("❌ No active session found");
+          window.location.href = "{% url 'signup' %}";
+        }
+      }
+
+      handleRedirect();
+    </script>
+  </head>
+  <body>
+    <p>Redirecting...</p>
+  </body>
+</html>

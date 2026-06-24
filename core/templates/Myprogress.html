@@ -1,0 +1,644 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect" />
+    <link
+      as="style"
+      href="https://fonts.googleapis.com/css2?display=swap&family=Manrope%3Awght%40400%3B500%3B700%3B800&family=Noto+Sans%3Awght%40400%3B500%3B700%3B900"
+      onload="this.rel='stylesheet'"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
+    <title>My Progress - MannMitra</title>
+    <link href="data:image/x-icon;base64," rel="icon" type="image/x-icon" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style type="text/tailwindcss">
+      :root {
+        --primary-color: #13c8ec;
+        --secondary-color: #f0f4f4;
+
+        --text-primary: #111718;
+        --text-secondary: #618389;
+      }
+      /* Add these styles inside your <style> tag */
+      .notification {
+          animation: slideIn 0.3s ease-out forwards;
+      }
+
+      @keyframes slideIn {
+          from {
+              opacity: 0;
+              transform: translateX(100%);
+          }
+          to {
+              opacity: 1;
+              transform: translateX(0);
+          }
+      }
+    </style>
+  </head>
+  <body class="bg-[#fafcff]">
+    <div
+      class="relative flex size-full min-h-screen flex-col group/design-root"
+      style="
+        --checkbox-tick-svg: url('data:image/svg+xml,%3csvg viewBox=%270 0 16 16%27 fill=%27rgb(255,255,255)%27 xmlns=%27http://www.w3.org/2000/svg%27%3e%3cpath d=%27M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z%27/%3e%3c/svg%3e');
+        --select-button-svg: url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2724px%27 height=%2724px%27 fill=%27rgb(97,131,137)%27 viewBox=%270 0 256 256%27%3e%3cpath d=%27M181.66,170.34a8,8,0,0,1,0,11.32l-48,48a8,8,0,0,1-11.32,0l-48-48a8,8,0,0,1,11.32-11.32L128,212.69l42.34-42.35A8,8,0,0,1,181.66,170.34Zm-96-84.68L128,43.31l42.34,42.35a8,8,0,0,0,11.32-11.32l-48-48a8,8,0,0,0-11.32,0l-48,48A8,8,0,0,0,85.66,85.66Z%27%3e%3c/path%3e%3c/svg%3e');
+        font-family: Manrope, 'Noto Sans', sans-serif;
+      "
+    >
+      <div class="layout-container flex h-full grow flex-col">
+        <header
+          class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#f0f4f4] bg-white px-10 py-3 sticky top-0 z-50 shadow-sm"
+        >
+          <div class="flex items-center gap-3">
+            <img
+              src="{% static 'core/images/LOHO.jpeg' %}"
+              alt="MannMitra Logo"
+              class="h-10 w-10 object-cover rounded-full"
+            />
+            <span class="text-2xl font-bold text-[var(--text-primary)]"
+              >MannMitra</span
+            >
+          </div>
+
+          <div class="flex items-center gap-8">
+            <nav class="flex items-center gap-8">
+              <a
+                class="text-[var(--text-secondary)] hover:text-[var(--text-primary)] text-sm font-medium leading-normal transition-colors"
+                href="{% url 'stu_dashboard' %}"
+                >Home</a
+              >
+              <a
+                class="text-[var(--text-secondary)] hover:text-[var(--text-primary)] text-sm font-medium leading-normal transition-colors"
+                href="{% url 'stu_resource' %}"
+                >Resources</a
+              >
+              <a
+                class="text-[var(--text-secondary)] hover:text-[var(--text-primary)] text-sm font-medium leading-normal transition-colors"
+                href="{% url 'community' %}"
+                >Community</a
+              >
+              <a
+                class="text-[var(--text-primary)] text-sm font-bold leading-normal"
+                href="#"
+                >My Progress</a
+              >
+            </nav>
+
+            <div class="h-6 w-px bg-[#dbe4e6]"></div>
+
+            <div class="flex items-center gap-4">
+              <button
+                class="flex size-10 items-center justify-center rounded-full text-[var(--text-secondary)] hover:bg-[var(--secondary-color)] hover:text-[var(--text-primary)] transition-colors"
+              >
+                <span class="material-symbols-outlined"> notifications </span>
+              </button>
+              <div
+                class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
+                style="
+                  background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD0okdZsyrZ_XzC5u52Ksqyfb6YM91HgJP9d3dYgz0HTAjpa6g1j0Usb97jyCwhUyDP1lEQXAm-d1Qx9sRo2-7dS31sL19Ydo47HK5MMS3d1fCHJpVzHPpyTMzqteFis0tesQo73ZrmH7MUZN9ldINTlhXJaAVRRu5kVRcYMz8S3U75h8HfRMNe1FrBr1LLiupzY1KXhE1lqRrOksDIExefuXd9BWZIuZc-Bvq1t9MwKkW1Tapmo4CIvmHzbagShMg2Ce9YlylPzcc');
+                "
+              ></div>
+            </div>
+          </div>
+        </header>
+        <main class="flex-1 px-10 py-8">
+          <div class="mx-auto max-w-4xl">
+            <div class="mb-10 flex items-center justify-between">
+              <div>
+                <h1
+                  class="text-[var(--text-primary)] tracking-tight text-3xl font-bold leading-tight"
+                >
+                  My Progress
+                </h1>
+                <p
+                  class="text-[var(--text-secondary)] mt-1 text-base font-normal leading-normal"
+                >
+                  Your personal hub for tracking your mental wellness journey.
+                </p>
+              </div>
+              <button
+                class="flex items-center gap-2 rounded-md bg-[var(--primary-color)] px-4 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-opacity-90"
+              >
+                <span class="material-symbols-outlined">download</span>
+                Export Data
+              </button>
+            </div>
+            <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
+              <div class="space-y-8 lg:col-span-2">
+                <div
+                  class="rounded-lg border border-[#dbe4e6] bg-white p-6 shadow-sm"
+                >
+                  <h2
+                    class="text-[var(--text-primary)] text-xl font-bold leading-tight tracking-[-0.015em]"
+                  >
+                    Daily Check-in
+                  </h2>
+                  <div class="mt-6 space-y-6">
+                    <div>
+                      <label
+                        class="text-sm font-medium text-[var(--text-primary)]"
+                        >How are you feeling today?</label
+                      >
+                      <div id="mood-selector" class="mt-2 flex flex-wrap gap-3">
+                        <label
+                          class="flex cursor-pointer items-center justify-center rounded-md border border-[#dbe4e6] px-4 py-2 text-sm font-medium text-[var(--text-primary)] has-[:checked]:border-2 has-[:checked]:border-[var(--primary-color)] has-[:checked]:bg-[#13c8ec]/10 has-[:checked]:px-[15px] has-[:checked]:py-[7px] transition-all"
+                        >
+                          😊 Happy
+                          <input
+                            class="invisible absolute"
+                            name="mood"
+                            type="radio"
+                            value="Happy"
+                          />
+                        </label>
+                        <label
+                          class="flex cursor-pointer items-center justify-center rounded-md border border-[#dbe4e6] px-4 py-2 text-sm font-medium text-[var(--text-primary)] has-[:checked]:border-2 has-[:checked]:border-[var(--primary-color)] has-[:checked]:bg-[#13c8ec]/10 has-[:checked]:px-[15px] has-[:checked]:py-[7px] transition-all"
+                        >
+                          😌 Content
+                          <input
+                            class="invisible absolute"
+                            name="mood"
+                            type="radio"
+                            value="Content"
+                          />
+                        </label>
+                        <label
+                          class="flex cursor-pointer items-center justify-center rounded-md border border-[#dbe4e6] px-4 py-2 text-sm font-medium text-[var(--text-primary)] has-[:checked]:border-2 has-[:checked]:border-[var(--primary-color)] has-[:checked]:bg-[#13c8ec]/10 has-[:checked]:px-[15px] has-[:checked]:py-[7px] transition-all"
+                        >
+                          😐 Neutral
+                          <input
+                            class="invisible absolute"
+                            name="mood"
+                            type="radio"
+                            value="Neutral"
+                          />
+                        </label>
+                        <label
+                          class="flex cursor-pointer items-center justify-center rounded-md border border-[#dbe4e6] px-4 py-2 text-sm font-medium text-[var(--text-primary)] has-[:checked]:border-[var(--primary-color)] has-[:checked]:bg-[#13c8ec]/10 has-[:checked]:px-[15px] has-[:checked]:py-[7px] transition-all"
+                        >
+                          😔 Sad
+                          <input
+                            class="invisible absolute"
+                            name="mood"
+                            type="radio"
+                            value="Sad"
+                          />
+                        </label>
+                        <label
+                          class="flex cursor-pointer items-center justify-center rounded-md border border-[#dbe4e6] px-4 py-2 text-sm font-medium text-[var(--text-primary)] has-[:checked]:border-2 has-[:checked]:border-[var(--primary-color)] has-[:checked]:bg-[#13c8ec]/10 has-[:checked]:px-[15px] has-[:checked]:py-[7px] transition-all"
+                        >
+                          😟 Anxious
+                          <input
+                            class="invisible absolute"
+                            name="mood"
+                            type="radio"
+                            value="Anxious"
+                          />
+                        </label>
+                      </div>
+                    </div>
+                    <div>
+                      <label
+                        class="text-sm font-medium text-[var(--text-primary)]"
+                        for="energy-level"
+                        >Energy Level</label
+                      >
+                      <input
+                        class="mt-2 h-2 w-full cursor-pointer appearance-none rounded-lg bg-[#dbe4e6] accent-[var(--primary-color)]"
+                        id="energy-level"
+                        max="100"
+                        min="0"
+                        type="range"
+                        value="50"
+                      />
+                      <div
+                        class="mt-1 flex justify-between text-xs text-[var(--text-secondary)]"
+                      >
+                        <span>Low</span>
+                        <span>High</span>
+                      </div>
+                    </div>
+                    <div>
+                      <label
+                        class="text-sm font-medium text-[var(--text-primary)]"
+                        >Sleep Quality</label
+                      >
+                      <div
+                        id="sleep-quality-stars"
+                        class="mt-2 flex items-center gap-2 text-3xl text-gray-300"
+                      >
+                        <span class="cursor-pointer">☆</span>
+                        <span class="cursor-pointer">☆</span>
+                        <span class="cursor-pointer">☆</span>
+                        <span class="cursor-pointer">☆</span>
+                        <span class="cursor-pointer">☆</span>
+                      </div>
+                    </div>
+                    <div>
+                      <label
+                        class="text-sm font-medium text-[var(--text-primary)]"
+                        for="day-tags"
+                        >Tag Your Day (e.g., exams, social, relaxing)</label
+                      >
+                      <input
+                        class="form-input mt-2 block w-full rounded-md border-[#dbe4e6] bg-white text-base text-[var(--text-primary)] placeholder:text-[var(--text-secondary)] focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)]"
+                        id="day-tags"
+                        placeholder="Add tags..."
+                        type="text"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="rounded-lg border border-[#dbe4e6] bg-white shadow-sm"
+                >
+                  <div class="p-6">
+                    <h2
+                      class="text-[var(--text-primary)] text-xl font-bold leading-tight tracking-[-0.015em]"
+                    >
+                      My Journal & Reflections
+                    </h2>
+                  </div>
+                  <div class="border-b border-[#dbe4e6]">
+                  </div>
+                  <div class="p-6">
+                    <p class="mb-2 text-sm text-[var(--text-secondary)]">
+                      Today's Prompt:
+                    </p>
+                    <p class="mb-4 font-semibold text-[var(--text-primary)]">
+                      What are you grateful for today?
+                    </p>
+                    <textarea
+                      id="journal-textarea"
+                      class="form-textarea w-full min-h-36 resize-y rounded-md border-[#dbe4e6] bg-white text-base text-[var(--text-primary)] placeholder:text-[var(--text-secondary)] focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)]"
+                      placeholder="Write your thoughts here..."
+                    ></textarea>
+                     <button id="save-journal-btn" class="mt-4 flex items-center gap-2 rounded-md bg-[var(--primary-color)] px-4 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-opacity-90">
+                        Save Today's Entry
+                      </button>
+                  </div>
+                </div>
+                <div
+                  class="rounded-lg border border-[#dbe4e6] bg-white shadow-sm"
+                >
+                  <div class="p-6">
+                    <h2
+                      class="text-[var(--text-primary)] text-xl font-bold leading-tight tracking-[-0.015em]"
+                    >
+                      My Therapy Journey (Optional)
+                    </h2>
+                  </div>
+                  <div class="border-b border-[#dbe4e6]">
+                    <nav class="-mb-px flex gap-6 px-6">
+                      <a
+                        class="shrink-0 border-b-2 border-[var(--primary-color)] px-1 pb-4 text-sm font-semibold text-[var(--primary-color)]"
+                        href="#"
+                        >Session Notes</a
+                      >
+                      <a
+                        class="shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-[var(--text-secondary)] hover:border-gray-300 hover:text-[var(--text-primary)]"
+                        href="#"
+                        >Key Takeaways</a
+                      >
+                      <a
+                        class="shrink-0 border-b-2 border-transparent px-1 pb-4 text-sm font-medium text-[var(--text-secondary)] hover:border-gray-300 hover:text-[var(--text-primary)]"
+                        href="#"
+                        >Goals</a
+                      >
+                    </nav>
+                  </div>
+                  <div class="p-6">
+                    <textarea
+                      class="form-textarea w-full min-h-36 resize-y rounded-md border-[#dbe4e6] bg-white text-base text-[var(--text-primary)] placeholder:text-[var(--text-secondary)] focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)]"
+                      placeholder="Write your session notes here..."
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+              <div class="space-y-8">
+                <div
+                  class="rounded-lg border border-[#dbe4e6] bg-white p-6 shadow-sm"
+                >
+                  <h2
+                    class="text-[var(--text-primary)] text-xl font-bold leading-tight tracking-[-0.015em]"
+                  >
+                    My Wellness Toolkit
+                  </h2>
+                  <div class="mt-6 space-y-4">
+                    <label class="flex items-center gap-3">
+                      <input
+                        checked=""
+                        class="h-5 w-5 rounded border-[#dbe4e6] text-[var(--primary-color)] focus:ring-[var(--primary-color)] checked:bg-[image:--checkbox-tick-svg] checked:bg-center"
+                        type="checkbox"
+                      />
+                      <span class="text-base text-[var(--text-primary)]"
+                        >Meditation</span
+                      >
+                    </label>
+                    <label class="flex items-center gap-3">
+                      <input
+                        checked=""
+                        class="h-5 w-5 rounded border-[#dbe4e6] text-[var(--primary-color)] focus:ring-[var(--primary-color)] checked:bg-[image:--checkbox-tick-svg] checked:bg-center"
+                        type="checkbox"
+                      />
+                      <span class="text-base text-[var(--text-primary)]"
+                        >Exercise</span
+                      >
+                    </label>
+                    <label class="flex items-center gap-3">
+                      <input
+                        class="h-5 w-5 rounded border-[#dbe4e6] text-[var(--primary-color)] focus:ring-[var(--primary-color)] checked:bg-[image:--checkbox-tick-svg] checked:bg-center"
+                        type="checkbox"
+                      />
+                      <span class="text-base text-[var(--text-primary)]"
+                        >Social Connection</span
+                      >
+                    </label>
+                    <label class="flex items-center gap-3">
+                      <input
+                        class="h-5 w-5 rounded border-[#dbe4e6] text-[var(--primary-color)] focus:ring-[var(--primary-color)] checked:bg-[image:--checkbox-tick-svg] checked:bg-center"
+                        type="checkbox"
+                      />
+                      <span class="text-base text-[var(--text-primary)]"
+                        >Nature</span
+                      >
+                    </label>
+                    <label class="flex items-center gap-3">
+                      <input
+                        class="h-5 w-5 rounded border-[#dbe4e6] text-[var(--primary-color)] focus:ring-[var(--primary-color)] checked:bg-[image:--checkbox-tick-svg] checked:bg-center"
+                        type="checkbox"
+                      />
+                      <span class="text-base text-[var(--text-primary)]"
+                        >Hobbies</span
+                      >
+                    </label>
+                  </div>
+                  <div class="mt-4 border-t border-[#dbe4e6] pt-4">
+                    <a
+                      class="text-sm font-semibold text-[var(--primary-color)] hover:underline"
+                      href="#"
+                      >Manage My Affirmations</a
+                    >
+                  </div>
+                </div>
+                <div
+                  class="rounded-lg border border-[#dbe4e6] bg-white p-6 shadow-sm"
+                >
+                  <h2
+                    class="text-[var(--text-primary)] text-xl font-bold leading-tight tracking-[-0.015em]"
+                  >
+                    Insights & Patterns
+                  </h2>
+                  <div class="mt-6">
+                    <div class="flex items-center justify-between">
+                      <button id="prev-month-btn" class="rounded-md p-1.5 hover:bg-[var(--secondary-color)]">
+                        <span class="material-symbols-outlined text-xl text-[var(--text-secondary)]">chevron_left</span>
+                      </button>
+                      <p id="month-year" class="text-sm font-bold text-[var(--text-primary)]">
+                        September 2025
+                      </p>
+                      <button id="next-month-btn" class="rounded-md p-1.5 hover:bg-[var(--secondary-color)]">
+                        <span class="material-symbols-outlined text-xl text-[var(--text-secondary)]">chevron_right</span>
+                      </button>
+                    </div>
+                    <div
+                      class="mt-4 grid grid-cols-7 text-center text-xs text-[var(--text-secondary)]"
+                    >
+                      <div class="font-semibold">S</div>
+                      <div class="font-semibold">M</div>
+                      <div class="font-semibold">T</div>
+                      <div class="font-semibold">W</div>
+                      <div class="font-semibold">T</div>
+                      <div class="font-semibold">F</div>
+                      <div class="font-semibold">S</div>
+                    </div>
+                    <div id="calendar-grid" class="mt-2 grid grid-cols-7 text-center text-sm">
+                      </div>
+                  </div>
+                  <div
+                    class="mt-4 border-t border-[#dbe4e6] pt-4 space-y-2 text-sm"
+                  >
+                    <a
+                      class="block font-semibold text-[var(--primary-color)] hover:underline"
+                      href="#"
+                      >View Activity-Mood Correlation</a
+                    >
+                    <a
+                      class="block font-semibold text-[var(--primary-color)] hover:underline"
+                      href="#"
+                      >View Tag Cloud</a
+                    >
+                  </div>
+                </div>
+                <div
+                  class="rounded-lg border border-red-200 bg-red-50 p-6 shadow-sm"
+                >
+                  <h2
+                    class="text-red-800 text-xl font-bold leading-tight tracking-[-0.015em]"
+                  >
+                    Need Help Now?
+                  </h2>
+                  <p class="mt-2 text-sm text-red-700">
+                    If you are in crisis or need immediate support, please reach
+                    out.
+                  </p>
+                                  <button
+                  id="helplineBtn" class="mt-4 w-full rounded-md bg-red-600 px-4 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-red-700"
+                >
+                  Kiran Mental Health Helpline
+                </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+    <script src="{% url 'config_js' %}"></script>
+    <script>
+      // -------------------------------------------------------------------
+      // SUPABASE SETUP
+      // -------------------------------------------------------------------
+       const { createClient } = supabase
+    const supabaseUrl = window.MANN_MITRA_CONFIG.SUPABASE_URL
+    const supabaseKey = window.MANN_MITRA_CONFIG.SUPABASE_KEY
+    const supabaseClient = createClient(supabaseUrl, supabaseKey)
+
+      // -------------------------------------------------------------------
+      // SCRIPT LOGIC
+      // -------------------------------------------------------------------
+      
+      document.addEventListener('DOMContentLoaded', () => {
+        // --- Get Elements ---
+        const saveBtn = document.getElementById('save-journal-btn');
+        const journalTextarea = document.getElementById('journal-textarea');
+        const moodSelector = document.getElementById('mood-selector');
+        const energySlider = document.getElementById('energy-level');
+        const dayTagsInput = document.getElementById('day-tags');
+        const starsContainer = document.getElementById('sleep-quality-stars');
+        const stars = starsContainer.querySelectorAll('span');
+        const helplineBtn = document.getElementById('helplineBtn');
+        const notificationContainer = document.getElementById('notification-container');
+        
+        // Calendar elements
+        const monthYearDisplay = document.getElementById('month-year');
+        const calendarGrid = document.getElementById('calendar-grid');
+        const prevMonthBtn = document.getElementById('prev-month-btn');
+        const nextMonthBtn = document.getElementById('next-month-btn');
+
+        let sleepQuality = 0;
+        let currentDate = new Date();
+
+        //Kiran Helpline
+        helplineBtn.addEventListener('click', () => {
+            const message = "Support is available. The Kiran Mental Health Helpline number is:";
+            const number = "1800-599-0019";
+            const notification = document.createElement('div');
+            notification.className = 'notification w-80 rounded-lg bg-red-600 text-white p-4 shadow-lg flex items-start gap-3';
+            notification.innerHTML = `
+                <i class="fa-solid fa-phone-volume mt-1"></i>
+                <div>
+                    <p class="text-sm font-medium">${message}</p>
+                    <p class="text-lg font-bold tracking-wider">${number}</p>
+                </div>
+                <button class="ml-auto text-red-200 hover:text-white">&times;</button>
+            `;
+            notificationContainer.appendChild(notification);
+            notification.querySelector('button').addEventListener('click', () => {
+                notification.remove();
+            });
+            setTimeout(() => {
+                notification.remove();
+            }, 10000);
+        });
+
+        // --- Star Rating Logic ---
+        stars.forEach((star, index) => {
+          star.addEventListener('click', () => {
+            sleepQuality = index + 1;
+            updateStars(sleepQuality);
+          });
+        });
+        
+        function updateStars(rating) {
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.textContent = '★';
+                    star.classList.add('text-yellow-400');
+                } else {
+                    star.textContent = '☆';
+                    star.classList.remove('text-yellow-400');
+                }
+            });
+        }
+
+        // --- Calendar Logic ---
+        async function renderCalendar(date) {
+            monthYearDisplay.textContent = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+            calendarGrid.innerHTML = '';
+
+            const month = date.getMonth();
+            const year = date.getFullYear();
+
+            const firstDayOfMonth = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            // Fetch entry dates from Supabase
+            const { data: entryDatesData, error } = await supabaseClient.rpc('get_journal_dates');
+            if (error) {
+                console.error("Could not fetch journal dates:", error);
+                return;
+            }
+            const entryDates = entryDatesData.map(d => d.entry_date);
+
+            // Add blank spaces for the start of the month
+            for (let i = 0; i < firstDayOfMonth; i++) {
+                calendarGrid.insertAdjacentHTML('beforeend', '<div></div>');
+            }
+
+            // Add days of the month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const hasEntry = entryDates.includes(dateString);
+                
+                let dayClass = "py-1.5";
+                if(hasEntry) {
+                    dayClass += " cursor-pointer rounded-full bg-green-200 font-bold text-green-800";
+                }
+
+                calendarGrid.insertAdjacentHTML('beforeend', `<div class="${dayClass}">${day}</div>`);
+            }
+        }
+
+        prevMonthBtn.addEventListener('click', () => {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar(currentDate);
+        });
+
+        nextMonthBtn.addEventListener('click', () => {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar(currentDate);
+        });
+
+
+        // --- Save Button Logic ---
+        saveBtn.addEventListener('click', async () => {
+            const journal_entry = journalTextarea.value;
+            const selectedMoodRadio = moodSelector.querySelector('input[name="mood"]:checked');
+            const mood = selectedMoodRadio ? selectedMoodRadio.value : null;
+            const energy_level = energySlider.value;
+            const day_tags = dayTagsInput.value;
+            
+            if (!journal_entry && !mood) {
+                alert('Please select a mood or write a journal entry before saving.');
+                return;
+            }
+
+            const journalData = {
+                journal_entry,
+                mood,
+                energy_level,
+                day_tags,
+                sleep_quality: sleepQuality,
+            };
+            
+            try {
+                const { data, error } = await supabaseClient
+                    .from('journals')
+                    .insert([journalData]);
+
+                if (error) throw error;
+
+                alert('Your journal entry has been saved successfully!');
+                
+                // Re-render the calendar to show the new entry
+                renderCalendar(currentDate);
+                
+                // Optionally clear the fields
+                journalTextarea.value = '';
+                dayTagsInput.value = '';
+                if(selectedMoodRadio) selectedMoodRadio.checked = false;
+                energySlider.value = 50;
+                sleepQuality = 0;
+                updateStars(0);
+
+            } catch (error) {
+                console.error('Failed to save journal entry:', error);
+                alert(`Error saving entry: ${error.message}.`);
+            }
+        });
+
+        // --- Initial Load ---
+        renderCalendar(currentDate);
+    });
+</script>
+  </body>
+  <div id="notification-container" class="fixed bottom-4 right-4 z-50 space-y-2"></div>
+</html>
