@@ -182,11 +182,10 @@
 
         if (error) {
           console.error("Supabase login error:", error);
-          if (error.message === "Invalid login credentials") {
-            alert("Invalid login credentials. Please check your email/password or register first.");
-          } else {
-            alert("Error: " + (error.message || JSON.stringify(error) || "Unknown login error"));
-          }
+          const errDetails = Object.getOwnPropertyNames(error)
+            .map(p => p + ": " + error[p])
+            .join("\n");
+          alert("Login Error Details:\n" + errDetails);
         } else if (data.session) {
           // --- SUCCESS ---
           window.location.href = "{% url 'stu_dashboard' %}";

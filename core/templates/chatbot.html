@@ -244,34 +244,98 @@
       let translatedQuestions = [],
         translatedOptions = [];
 
-      const phq9Questions = [
-        "Little interest or pleasure in doing things?",
-        "Feeling down, depressed, or hopeless?",
-        "Trouble falling or staying asleep, or sleeping too much?",
-        "Feeling tired or having little energy?",
-        "Poor appetite or overeating?",
-        "Feeling bad about yourself — or that you are a failure or have let yourself or your family down?",
-        "Trouble concentrating on things, such as reading the newspaper or watching television?",
-        "Moving or speaking so slowly that other people could have noticed? Or the opposite — being so fidgety or restless that you have been moving a lot more than usual?",
-        "Thoughts that you would be better off dead or of hurting yourself in some way?",
-      ];
-
-      const gad7Questions = [
-        "Feeling nervous, anxious, or on edge?",
-        "Not being able to stop or control worrying?",
-        "Worrying too much about different things?",
-        "Trouble relaxing?",
-        "Being so restless that it’s hard to sit still?",
-        "Becoming easily annoyed or irritable?",
-        "Feeling afraid as if something awful might happen?",
-      ];
-
-      const quizOptions = [
-        "Not at all",
-        "Several days",
-        "More than half the days",
-        "Nearly every day",
-      ];
+      const translations = {
+        en: {
+          intro_phq9: "Starting PHQ-9 Questionnaire. Answer based on how you've felt over the past 2 weeks.",
+          intro_gad7: "Starting GAD-7 Questionnaire. Answer based on how you've felt over the past 2 weeks.",
+          phq9: [
+            "Little interest or pleasure in doing things?",
+            "Feeling down, depressed, or hopeless?",
+            "Trouble falling or staying asleep, or sleeping too much?",
+            "Feeling tired or having little energy?",
+            "Poor appetite or overeating?",
+            "Feeling bad about yourself — or that you are a failure or have let yourself or your family down?",
+            "Trouble concentrating on things, such as reading the newspaper or watching television?",
+            "Moving or speaking so slowly that other people could have noticed? Or the opposite — being so fidgety or restless that you have been moving a lot more than usual?",
+            "Thoughts that you would be better off dead or of hurting yourself in some way?"
+          ],
+          gad7: [
+            "Feeling nervous, anxious, or on edge?",
+            "Not being able to stop or control worrying?",
+            "Worrying too much about different things?",
+            "Trouble relaxing?",
+            "Being so restless that it’s hard to sit still?",
+            "Becoming easily annoyed or irritable?",
+            "Feeling afraid as if something awful might happen?"
+          ],
+          options: [
+            "Not at all",
+            "Several days",
+            "More than half the days",
+            "Nearly every day"
+          ]
+        },
+        hi: {
+          intro_phq9: "पीएचक्यू-9 (PHQ-9) प्रश्नावली शुरू हो रही है। पिछले 2 हफ्तों में आपने कैसा महसूस किया है, उसके आधार पर उत्तर दें।",
+          intro_gad7: "जीएडी-7 (GAD-7) प्रश्नावली शुरू हो रही है। पिछले 2 हफ्तों में आपने कैसा महसूस किया है, उसके आधार पर उत्तर दें।",
+          phq9: [
+            "कामों में बहुत कम रुचि या आनंद होना?",
+            "उदासी, निराशा, या बेबसी महसूस करना?",
+            "सोने में परेशानी होना, या बहुत अधिक सोना?",
+            "थकान या ऊर्जा की कमी महसूस करना?",
+            "भूख न लगना या बहुत अधिक खाना?",
+            "अपने बारे में बुरा महसूस करना — जैसे कि आप असफल हैं या आपने अपने परिवार को निराश किया है?",
+            "चीजों पर ध्यान केंद्रित करने में परेशानी होना, जैसे पढ़ना या टीवी देखना?",
+            "इतनी धीमी गति से बोलना या चलना कि दूसरे ध्यान दे सकें? या इसके विपरीत — अत्यधिक बेचैनी महसूस करना?",
+            "ऐसा सोचना कि मर जाना बेहतर होगा या खुद को नुकसान पहुँचाने का विचार आना?"
+          ],
+          gad7: [
+            "घबराहट, चिंता, या चिड़चिड़ापन महसूस करना?",
+            "चिंता को रोकने या नियंत्रित करने में असमर्थ होना?",
+            "विभिन्न चीजों के बारे में बहुत अधिक चिंता करना?",
+            "आराम करने में परेशानी होना?",
+            "इतनी बेचैनी होना कि शांत बैठना मुश्किल हो?",
+            "आसानी से नाराज या चिड़चिड़ा हो जाना?",
+            "ऐसा महसूस होना कि कुछ भयानक होने वाला है?"
+          ],
+          options: [
+            "बिल्कुल नहीं",
+            "कई दिन",
+            "आधे से अधिक दिन",
+            "लगभग हर दिन"
+          ]
+        },
+        or: {
+          intro_phq9: "PHQ-9 ପ୍ରଶ୍ନାବଳୀ ଆରମ୍ଭ ହେଉଛି। ବିଗତ ୨ ସପ୍ତାହ ମଧ୍ୟରେ ଆପଣ କିପରି ଅନୁଭବ କରିଛନ୍ତି ସେହି ଆଧାରରେ ଉତ୍ତର ଦିଅନ୍ତୁ।",
+          intro_gad7: "GAD-7 ପ୍ରଶ୍ନାବଳୀ ଆରମ୍ଭ ହେଉଛି। ବିଗତ ୨ ସପ୍ତାହ ମଧ୍ୟରେ ଆପଣ କିପରି ଅନୁଭବ କରିଛନ୍ତି ସେହି ଆଧାରରେ ଉତ୍ତର ଦିଅନ୍ତୁ।",
+          phq9: [
+            "କୌଣସି କାର୍ଯ୍ୟ କରିବାରେ ବହୁତ କମ୍ ଆଗ୍ରହ କିମ୍ବା ଆନନ୍ଦ ମିଳୁଛି କି?",
+            "ମନ ଦୁଃଖ, ଅବସାଦ କିମ୍ବା ନିରାଶା ଅନୁଭବ ହେଉଛି କି?",
+            "ଶୋଇବାରେ ଅସୁବିଧା ହେଉଛି କିମ୍ବା ଅଧିକ ନିଦ ହେଉଛି କି?",
+            "ଥକ୍କା ଲାଗୁଛି କିମ୍ବା ଶରୀରରେ ଶକ୍ତିର ଅଭାବ ଅନୁଭବ ହେଉଛି କି?",
+            "ଭୋକ ଲାଗୁନାହିଁ କିମ୍ବା ବହୁତ ଅଧିକ ଖାଉଛନ୍ତି କି?",
+            "ନିଜ ପ୍ରତି ଖରାପ ଧାରଣା ସୃଷ୍ଟି ହେଉଛି କି — ଯେପରିକି ଆପଣ ଜଣେ ଅସଫଳ ବ୍ୟକ୍ତି କିମ୍ବା ନିଜ ପରିବାରକୁ ନିରାଶ କରିଛନ୍ତି?",
+            "କୌଣସି ଜିନିଷ ଉପରେ ମନୋଯୋଗ ଦେବାରେ ଅସୁବିଧା ହେଉଛି କି, ଯେପରିକି ବହି ପଢିବା କିମ୍ବା ଟିଭି ଦେଖିବା?",
+            "ଏତେ ଧୀରେ ଚାଲୁଛନ୍ତି କିମ୍ବା କହୁଛନ୍ତି ଯେ ଅନ୍ୟମାନେ ତାହା ଲକ୍ଷ୍ୟ କରିପାରିବେ? କିମ୍ବା ଏହାର ଓଲଟା — ବହୁତ ଅଧିକ ବିକଳ କିମ୍ବା ଅସ୍ଥିର ଅନୁଭବ ହେଉଛନ୍ତି?",
+            "ନିଜ ଜୀବନ ହାରିବା କିମ୍ବା ନିଜକୁ କୌଣସି ଉପାୟରେ କ୍ଷତି ପହଞ୍ଚାଇବାକୁ ଚିନ୍ତା ଆସୁଛି କି?"
+          ],
+          gad7: [
+            "ଭୟ, ଚିନ୍ତା କିମ୍ବା ଅସ୍ଥିରତା ଅନୁଭବ ହେଉଛି କି?",
+            "ଚିନ୍ତାକୁ ନିୟନ୍ତ୍ରଣ କରିବାରେ ଅସମର୍ଥ ଅନୁଭବ କରୁଛନ୍ତି କି?",
+            "ବିଭିନ୍ନ ବିଷୟରେ ବହୁତ ଅଧିକ ଚିନ୍ତା କରୁଛନ୍ତି କି?",
+            "ଶାନ୍ତ କିମ୍ବା ଆରାମ ଅନୁଭବ କରିବାରେ ଅସୁବିଧା ହେଉଛି କି?",
+            "ଏତେ ଅସ୍ଥିର ଲାଗୁଛି ଯେ ଏକ ସ୍ଥାନରେ ସ୍ଥିର ହୋଇ ବସିବା କଷ୍ଟକର ହେଉଛି କି?",
+            "ସହଜରେ ରାଗିଯାଉଛନ୍ତି କିମ୍ବା ବିରକ୍ତ ଅନୁଭବ କରୁଛନ୍ତି କି?",
+            "କିଛି ଖରାପ ଘଟିବା ଭୟରେ ମନରେ ଆଶଙ୍କା ରହୁଛି କି?"
+          ],
+          options: [
+            "ଜମାରୁ ନୁହେଁ",
+            "କିଛି ଦିନ",
+            "ଅଧାରୁ ଅଧିକ ଦିନ",
+            "ପ୍ରାୟ ପ୍ରତିଦିନ"
+          ]
+        }
+      };
 
       function addBotMessage(message) {
         const msgDiv = document.createElement("div");
@@ -321,26 +385,43 @@
         if (!text || text.trim() === "") return text;
         if (
           targetLang === sourceLang ||
-          (targetLang === "en" && sourceLang === "en")
+          (targetLang === "en" && (sourceLang === "en" || sourceLang === "auto"))
         )
           return text;
+
+        const langNames = {
+          en: "English",
+          hi: "Hindi",
+          or: "Odia"
+        };
+        const targetLangName = langNames[targetLang] || targetLang;
+
         try {
+          const modelName = window.MANN_MITRA_CONFIG.GEMINI_MODEL || "gemini-2.5-flash";
           const res = await fetch(
-            `https://translation.googleapis.com/language/translate/v2?key=${API_KEY}`,
+            `https://generativelanguage.googleapis.com/v1/models/${modelName}:generateContent?key=${API_KEY}`,
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
-                q: text,
-                target: targetLang,
-                source: sourceLang,
+                contents: [{
+                  parts: [{
+                    text: `Translate the following text to ${targetLangName}. Respond only with the translated text. Do not add any quotes, markdown formatting, explanations, or notes. Text to translate: "${text}"`
+                  }]
+                }]
               }),
             }
           );
           const data = await res.json();
-          return data.data.translations[0].translatedText;
+          if (
+            data.candidates &&
+            data.candidates[0]?.content?.parts?.length > 0
+          ) {
+            return data.candidates[0].content.parts[0].text.trim();
+          }
+          return text;
         } catch (e) {
-          console.error("Translation Error:", e);
+          console.error("Translation Error using Gemini:", e);
           return text;
         }
       }
@@ -349,16 +430,8 @@
         if (!arr || arr.length === 0) return arr;
         if (targetLang === "en") return arr;
         try {
-          const res = await fetch(
-            `https://translation.googleapis.com/language/translate/v2?key=${API_KEY}`,
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ q: arr, target: targetLang }),
-            }
-          );
-          const data = await res.json();
-          return data.data.translations.map((t) => t.translatedText);
+          const promises = arr.map((item) => translateText(item, targetLang));
+          return await Promise.all(promises);
         } catch (e) {
           console.error("Translation Array Error:", e);
           return arr;
@@ -375,13 +448,26 @@
           btn.onclick = async () => {
             userLang =
               lang === "English" ? "en" : lang === "Hindi" ? "hi" : "or";
+            
+            // Dynamically set Speech Recognition language
+            if (recognition) {
+              if (userLang === "hi") {
+                recognition.lang = "hi-IN";
+              } else if (userLang === "or") {
+                recognition.lang = "or-IN";
+              } else {
+                recognition.lang = "en-IN";
+              }
+            }
+
             addUserMessage(lang);
-            addBotMessage(
-              await translateText(
-                "✅ Language set to " + lang + ". You can start chatting now!",
-                userLang
-              )
-            );
+            let greetMsg = "✅ Language set to " + lang + ". You can start chatting now!";
+            if (userLang === "hi") {
+              greetMsg = "✅ भाषा सेट की गई है। अब आप बातचीत शुरू कर सकते हैं!";
+            } else if (userLang === "or") {
+              greetMsg = "✅ ଭାଷା ସେଟ୍ ହୋଇଛି। ଆପଣ ଏବେ କଥାବାର୍ତ୍ତା ଆରମ୍ଭ କରିପାରିବେ!";
+            }
+            addBotMessage(greetMsg);
             chatState = "initial";
           };
           langDiv.appendChild(btn);
@@ -396,23 +482,14 @@
         phq9Score = 0;
         gad7Score = 0;
         chatState = type;
-        const intro =
-          type === "phq9"
-            ? "Starting PHQ-9 Questionnaire. Answer based on how you've felt over the past 2 weeks."
-            : "Starting GAD-7 Questionnaire. Answer based on how you've felt over the past 2 weeks.";
-        const originalQuestions =
-          type === "phq9" ? phq9Questions : gad7Questions;
+        
+        const langData = translations[userLang] || translations["en"];
+        const intro = type === "phq9" ? langData.intro_phq9 : langData.intro_gad7;
+        
+        translatedQuestions = type === "phq9" ? langData.phq9 : langData.gad7;
+        translatedOptions = langData.options;
 
-        const [translatedIntro, tQuestions, tOptions] = await Promise.all([
-          translateText(intro, userLang),
-          translateArray(originalQuestions, userLang),
-          translateArray(quizOptions, userLang),
-        ]);
-
-        translatedQuestions = tQuestions;
-        translatedOptions = tOptions;
-
-        addBotMessage(translatedIntro);
+        addBotMessage(intro);
         showQuestion();
       }
 
@@ -456,15 +533,20 @@
         addBotMessage(await translateText(scoreMsg, userLang));
 
         if (showCrisis) {
+          const title = await translateText("🚨 Immediate Help Recommended 🚨", userLang);
+          const bodyText = await translateText("Your responses suggest high levels of distress. Please consider speaking to a professional immediately.", userLang);
+          const btnText = await translateText("Book a Counsellor", userLang);
+          const closeText = await translateText("I Understand", userLang);
+
           crisisCard.innerHTML = `
-      <h4>🚨 Immediate Help Recommended 🚨</h4>
-      <p>Your responses suggest high levels of distress. Please consider speaking to a professional immediately.</p>
+      <h4>${title}</h4>
+      <p>${bodyText}</p>
 
 <a href="{% url 'booking' %}">
-  <button id="book-counsellor-btn">Book a Counsellor</button>
+  <button id="book-counsellor-btn">${btnText}</button>
 </a>
 
-<button id="close-crisis-btn">I Understand</button>
+<button id="close-crisis-btn">${closeText}</button>
     `;
           crisisCard.style.display = "block";
           document
@@ -485,10 +567,17 @@
       // Gemini AI
       async function fetchGeminiResponse(text) {
         const loading = showLoading();
+        
+        const langNames = {
+          en: "English",
+          hi: "Hindi",
+          or: "Odia"
+        };
+        const targetLangName = langNames[userLang] || "English";
+
         try {
-          const tUser = await translateText(text, "en", userLang);
           const payload = {
-            contents: [{ parts: [{ text: tUser }] }],
+            contents: [{ parts: [{ text: text }] }],
             systemInstruction: {
               parts: [
                 {
@@ -519,7 +608,9 @@ Examples: pranayama, mantra chanting, sipping chai, taking a short walk, gratitu
 -dont write long paragraphs answer in points
 Never give medical prescriptions. Keep it simple, local, and human-like.
 
-Be concise, supportive, and human-like. Do not overwhelm with information — focus on clarity, care, and next steps.
+Be concise, supportive, and human-like. Do not overwhelm with information — focus on clarity, care, and next steps.
+
+Respond in ${targetLangName} (the user has selected ${targetLangName} as their preferred language). If they type in English or another language, translate your thoughts and respond in ${targetLangName} using the appropriate script/alphabet.
       `,
                 },
               ],
@@ -542,7 +633,7 @@ Be concise, supportive, and human-like. Do not overwhelm with information — fo
             result.candidates[0]?.content?.parts?.length > 0
           ) {
             let reply = result.candidates[0].content.parts[0].text;
-            addBotMessage(await translateText(reply, userLang, "en"));
+            addBotMessage(reply);
           } else addBotMessage("Sorry, I'm having trouble right now.");
         } catch (e) {
           hideLoading(loading);
@@ -611,11 +702,11 @@ Be concise, supportive, and human-like. Do not overwhelm with information — fo
         recognition.interimResults = false;
 
         recognition.onstart = () => {
-          micButton.classList.add("bg-red-600"); // show recording
+          micButton.classList.add("animate-pulse", "ring-4", "ring-red-400");
         };
 
         recognition.onend = () => {
-          micButton.classList.remove("bg-green-500");
+          micButton.classList.remove("animate-pulse", "ring-4", "ring-red-400");
         };
 
         recognition.onresult = (event) => {
