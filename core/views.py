@@ -95,7 +95,8 @@ def config_js(request):
     window.MANN_MITRA_CONFIG = {{
         SUPABASE_URL: "{getattr(settings, 'SUPABASE_URL', '')}",
         SUPABASE_KEY: "{getattr(settings, 'SUPABASE_KEY', '')}",
-        GEMINI_API_KEY: "{getattr(settings, 'GEMINI_API_KEY', '')}"
+        GEMINI_API_KEY: "{getattr(settings, 'GEMINI_API_KEY', '')}",
+        GEMINI_MODEL: "{getattr(settings, 'GEMINI_MODEL', 'gemini-2.5-flash')}"
     }};
     """
     return HttpResponse(config, content_type="application/javascript")

@@ -662,7 +662,8 @@ Based on this, please provide a detailed analysis following all the rules in you
 Include general wellness tips, some traditional Indian practices (like Yoga or Ayurveda), and potential topics or types of remedies I could discuss with a qualified doctor.`;
 
             const apiKey = window.MANN_MITRA_CONFIG.GEMINI_API_KEY;
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+            const modelName = window.MANN_MITRA_CONFIG.GEMINI_MODEL || "gemini-2.5-flash";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1/models/${modelName}:generateContent?key=${apiKey}`;
 
             try {
                 const payload = {
